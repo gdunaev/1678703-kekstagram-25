@@ -21,3 +21,4 @@ const checkLengthString = (currentString, maxLength) => !(String(currentString).
 
 getRandomInt(5, 2);
 checkLengthString('привет', 6);
+

@@ -23,7 +23,7 @@
     "license": "MIT",
     "scripts": {
         "build": "webpack --mode development",
-        "start": "browser-sync start --server \"build/\" --no-ui --files \"js/*.js\"",
+        "start": "browser-sync start --server --no-ui --files \"js/*.js\"",
         "lint": "eslint js/"
     },
     "engines": {
