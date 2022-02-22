@@ -16,8 +16,8 @@ const getRandomInt = (min, max) => {
 };
 
 //проверить длину строки
-const checkLengthString = (currentString, maxLength) => String(currentString).length > maxLength ? false : true;
+const checkLengthString = (currentString, maxLength) => !(String(currentString).length > maxLength);
 
 
-console.log(getRandomInt(5, 2));
-console.log(checkLengthString('привет', 6));
+getRandomInt(5, 2);
+checkLengthString('привет', 6);
