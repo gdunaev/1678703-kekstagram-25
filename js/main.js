@@ -6,17 +6,17 @@ const getRandomInt = (min, max) => {
     return 'Неправильно указаны значения.';
   }
 
-  let allNumbers = [];
+  const allNumbers = [];
   for (let i = min; i <= max; i++) {
     allNumbers.push(i);
   }
 
-  const randomNumber = allNumbers[Math.floor(Math.random() * allNumbers.length)];
+  return allNumbers[Math.floor(Math.random() * allNumbers.length)];
 
-  return randomNumber;
 }
 
 //проверить длину строки
-const checkLengthString = (currentString, maxLength) => String(currentString).length > maxLength ? false : true;
+const checkLengthString = (currentString, maxLength) => {String(currentString).length > maxLength ? false : true};
 
 getRandomInt(5, 2);
+checkLengthString('привет', 6);
