@@ -13,10 +13,12 @@ const getRandomInt = (min, max) => {
 
   return allNumbers[Math.floor(Math.random() * allNumbers.length)];
 
-}
+};
 
 //проверить длину строки
-const checkLengthString = (currentString, maxLength) => {String(currentString).length > maxLength ? false : true};
+const checkLengthString = (currentString, maxLength) => {
+  return String(currentString).length > maxLength ? false : true;
+};
 
 getRandomInt(5, 2);
 checkLengthString('привет', 6);
