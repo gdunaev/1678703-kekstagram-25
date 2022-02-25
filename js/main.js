@@ -1,17 +1,11 @@
 //получить рандомное число
 const getRandomInt = (min, max) => {
-  if (min < 0) {
-    min = 0;
-  } else if (min >= max) {
-    return 'Неправильно указаны значения.';
-  }
 
-  const allNumbers = [];
-  for (let i = min; i <= max; i++) {
-    allNumbers.push(i);
-  }
+  const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
+  const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
 
-  return allNumbers[Math.floor(Math.random() * allNumbers.length)];
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
 
 };
 
