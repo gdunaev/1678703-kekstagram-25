@@ -67,7 +67,7 @@ const getMessage = () => {
 };
 
 //получить массив комментариев
-const getComments = (checkedCommentId, MAX_ID) => {
+const getComments = (checkedCommentId) => {
 
   const commentUserCount = getRandomInt(CommentCount.MIN, CommentCount.MAX);
 
@@ -85,6 +85,7 @@ const getComments = (checkedCommentId, MAX_ID) => {
 
 
 //проверить длину строки
+// eslint-disable-next-line no-unused-vars
 const checkLengthString = (currentString, maxLength) => !(String(currentString).length > maxLength);
 
 //получить массив данных
@@ -103,12 +104,12 @@ const getData = () => {
       'url': `photos/${getRandomInt(1, OBJECT_COUNT, checkedFotoId)}.jpg`,
       'description': 'Описание фотографии',
       'likes': getRandomInt(LikeCount.MIN, LikeCount.MAX),
-      'comments': getComments(сheckedCommentId, MAX_ID),
+      'comments': getComments(сheckedCommentId),
     }, );
   }
   return currentData;
 };
 
-console.log(getData());
+getData();
 
 
