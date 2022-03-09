@@ -31,7 +31,7 @@ const MessageCount = {
 };
 const CommentCount = {
   MIN: 0,
-  MAX: 8,
+  MAX: 16,
 };
 const MAX_ID = 200;
 

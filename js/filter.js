@@ -1,16 +1,17 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable indent */
 
 // import { getArrayPhotos } from './photos.js';
 // import { getRandomInt } from './util.js';
 // import _ from 'lodash';
 
-// const QUANTITY_RANDOM = 10;
-// const RERENDER_DELAY = 500;
+const QUANTITY_RANDOM = 10;
+const RERENDER_DELAY = 500;
 
-// const filterDefault = document.querySelector('#filter-default');
-// const filterRandom = document.querySelector('#filter-random');
-// const filterDiscussed = document.querySelector('#filter-discussed');
-// const imgFiltersButton = document.querySelectorAll('.img-filters__button');
+const filterDefault = document.querySelector('#filter-default');
+const filterRandom = document.querySelector('#filter-random');
+const filterDiscussed = document.querySelector('#filter-discussed');
+const imgFiltersButton = document.querySelectorAll('.img-filters__button');
 
 
 // //обработчик клика фильтра
@@ -80,20 +81,20 @@
 // }
 
 //сортировка массива при установке фильтров
-const sortFilter = (array) => {
-    // for (let elem of imgFiltersButton) {
-    //     if (elem.className.includes('img-filters__button--active')) {
-    //         if (elem === filterDefault) {
-    //             //по умолчанию
-    //             return array;
-    //         } else if (elem === filterRandom) {
-    //             return sortArrayRandomFirst(array);
-    //         } else if (elem === filterDiscussed) {
-    //             return sortArrayDiscussed(array);
-    //         }
-    //     }
-    // }
-    return array;
-}
+const sortPhotos = (photos) => {
+    for (const element of imgFiltersButton) {
+        if (element.className.includes('img-filters__button--active')) {
+            if (element === filterDefault) {
+                //по умолчанию
+                return photos;
+            } else if (element === filterRandom) {
+                return photos; //sortArrayRandomFirst(array);
+            } else if (element === filterDiscussed) {
+                return photos; //sortArrayDiscussed(array);
+            }
+        }
+    }
+    return photos;
+};
 
-export { sortFilter }; //setListenersFilters
+export { sortPhotos }; //setListenersFilters
