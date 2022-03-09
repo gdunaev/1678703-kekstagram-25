@@ -1,5 +1,5 @@
-import {getData} from './data.js';
+import { getData } from './data.js';
 
 getData();
 
-
+//
