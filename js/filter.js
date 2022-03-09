@@ -1,14 +1,16 @@
+/* eslint-disable indent */
+
 // import { getArrayPhotos } from './photos.js';
-import { getRandomInt } from './util.js';
+// import { getRandomInt } from './util.js';
 // import _ from 'lodash';
 
-const QUANTITY_RANDOM = 10;
-const RERENDER_DELAY = 500;
+// const QUANTITY_RANDOM = 10;
+// const RERENDER_DELAY = 500;
 
-const filterDefault = document.querySelector('#filter-default');
-const filterRandom = document.querySelector('#filter-random');
-const filterDiscussed = document.querySelector('#filter-discussed');
-const imgFiltersButton = document.querySelectorAll('.img-filters__button');
+// const filterDefault = document.querySelector('#filter-default');
+// const filterRandom = document.querySelector('#filter-random');
+// const filterDiscussed = document.querySelector('#filter-discussed');
+// const imgFiltersButton = document.querySelectorAll('.img-filters__button');
 
 
 // //обработчик клика фильтра
