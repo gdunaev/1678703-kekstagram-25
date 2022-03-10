@@ -1,5 +1,6 @@
-import {getData} from './data.js';
+import { getData } from './data.js';
+import { renderPhotos } from './render-photo.js';
 
-getData();
 
+renderPhotos(getData()); //это загрузка локальных фото
 
