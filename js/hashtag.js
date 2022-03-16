@@ -82,16 +82,17 @@ const checkArray = (arrayHashtags) => {
 //функция установки сообщения при проверке поля
 //при установке не дает отправить форму!
 const checkComment = () => {
-  const valueLength = textComment.value.length;
-  let textMessage = '';
-  if (valueLength > MAX_COMMENT_LENGTH) {
-    textMessage = 'Удалите лишние ' + (valueLength - MAX_COMMENT_LENGTH) + ' симв.';
-  } else {
-    textMessage = '';
-  }
-  textComment.setCustomValidity(textMessage);
-  textComment.reportValidity();
-  textComment.style.border = (textMessage === '') ? '' : '5px solid #FF0000'; //красный цвет рамки
+  console.log('111')
+  // const valueLength = textComment.value.length;
+  // let textMessage = '';
+  // if (valueLength > MAX_COMMENT_LENGTH) {
+  //   textMessage = 'Удалите лишние ' + (valueLength - MAX_COMMENT_LENGTH) + ' симв.';
+  // } else {
+  //   textMessage = '';
+  // }
+  // textComment.setCustomValidity(textMessage);
+  // textComment.reportValidity();
+  // textComment.style.border = (textMessage === '') ? '' : '5px solid #FF0000'; //красный цвет рамки
 }
 
 //установка прослушки на поле Комментарий

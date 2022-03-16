@@ -1,6 +1,7 @@
 import { isEscEvent } from './util.js'; //showBlockMessage
-import { textHashtags, textComment } from './hashtag.js'; //setListenerHashtag, setListenerComment,
+import { textHashtags, textComment, setListenerComment } from './hashtag.js'; //setListenerHashtag, setListenerComment,
 import { scaleControlValue, } from './scale.js'; //setListenersScale, setScale, onSmallerScaleClick, onBiggerScaleClick
+
 // import { createSlaider, changeEffectClick, changeFilter } from './effect.js';
 // import { sendRequest } from './fetch.js';
 
@@ -22,7 +23,7 @@ const effectMarvin = document.querySelector('#effect-marvin');
 const effectPhobos = document.querySelector('#effect-phobos');
 const effectHeat = document.querySelector('#effect-heat');
 
-const formUpload = document.querySelector('#upload-select-image');
+const formUpload = document.querySelector('.img-upload__form');
 const imgUploadPreview = document.querySelector('.img-upload__preview');
 const sliderElement = document.querySelector('.effect-level__slider');
 const effectsPreview = document.querySelectorAll('.effects__preview');
@@ -101,7 +102,7 @@ const onUploadFileChange = () => {
     // setListenersEffect();
     // createSlaider();
     // setListenerHashtag();
-    // setListenerComment();
+    setListenerComment();
     // showUploadFile();
 }
 
@@ -169,12 +170,37 @@ const onPopupeEscPress = (evt) => {
 //   hideFormUpload();
 // }
 
+
+const pristine = new Pristine(formUpload, {
+  classTo: 'form__item', //обязательное поле, пришлось добавлять div, и этим дивом надо обернуть проверяемое поле
+  //  errorClass: 'form__item--invalid',
+  // successClass: 'img-upload__text--valid',
+  errorTextParent: 'form__item', //обязательное поле, одинаковое название с classTo
+  errorTextTag: 'div', //fieldset', //вывод в строку (span)
+  // errorTextClass: 'img-upload__form__error'
+}, true);
+
+
+function validateComment (value) {
+  return value.length <= 5;
+}
+
+// поле которое проверяется, функция проверки, текст ошибки
+pristine.addValidator(formUpload.querySelector('.text__description'),
+  validateComment, 'Максимум 5 символов');
+
 //сделаем отдельный обработчик чтобы потом удалить его,
 //иначе при последующих отправках он начинает в 2,3,4,n раз больше вызываться.
 const onFormSubmit = (evt) => {
-    hideFormUpload();
+    // console.log('111')
+    // const pristine = new Pristine(formUpload);
+    // hideFormUpload();
     // evt.preventDefault();
     // sendRequest('POST', { method: 'POST', body: new FormData(formUpload) }, onSuccess, onError);
+    //------------------------------------
+    evt.preventDefault();
+    const v = pristine.validate();
+    console.log(v)
 }
 
 const submitForm = () => {
