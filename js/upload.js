@@ -1,7 +1,9 @@
-import { isEscEvent } from './util.js'; 
-import { textHashtags, textComment, setListenerComment } from './hashtag.js'; 
-import { scaleControlValue, } from './scale.js'; 
+import { isEscEvent } from './util.js';
+import { scaleControlValue, } from './scale.js';
 
+const textComment = document.querySelector('.text__description');
+const formUpload = document.querySelector('.img-upload__form');
+const textHashtags = document.querySelector('.text__hashtags');
 
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
 const uploadCancel = document.querySelector('#upload-cancel');
@@ -9,7 +11,13 @@ const bodySelector = document.querySelector('body');
 const fileUpload = document.querySelector('#upload-file');
 const effectNone = document.querySelector('#effect-none');
 
-const formUpload = document.querySelector('.img-upload__form');
+const MAX_COMMENT_LENGTH = 140;
+const MAX_COUNT_HASHTAGS = 5;
+const MAX_LENGTH_HASHTAG = 20;
+const MIN_LENGTH_HASHTAG = 2;
+const FIRST_SIMBOL_HASHTAG = '#';
+
+
 
 
 //функция открытия окна редактирования
@@ -40,7 +48,6 @@ const hideFormUpload = () => {
 const onUploadFileChange = () => {
     submitForm();
     showImgUpload();
-    setListenerComment();
 }
 
 
@@ -78,23 +85,87 @@ const pristine = new Pristine(formUpload, {
 
 
 function validateComment(value) {
-    return value.length <= 140;
+    return value.length <= MAX_COMMENT_LENGTH;
 }
+
+let message = '';
 
 function validateHastag(value) {
-    return value.length <= 3;
+
+    message = '';
+    const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+
+    //убираем пробелы и формируем массив
+    let arr = value.split(/\s+/g);
+    arr = arr.filter((element) => {
+        return element !== '';
+    })
+
+    //проверка на кол-во хештегов
+    if (arr.length > MAX_COUNT_HASHTAGS) {
+      message = `Количество хештегов превышает допустимое: ${MAX_COUNT_HASHTAGS}`;
+      return false;
+    }
+
+
+    //обход всех хештегов
+  const repeatingHastags = [];
+  for (const hashtag of arr) {
+
+    //все валидные
+    if (re.test(hashtag)) {
+      //проверка повторяющихся хештегов без учета регистра
+      if (repeatingHastags.indexOf(hashtag.toLowerCase()) >= 0) {
+        message = `Хештег (${hashtag}) уже использовался.`;
+        return false;
+      }
+      repeatingHastags.push(hashtag.toLowerCase());
+      continue;
+    }
+
+    //все НЕвалидные
+    //если длина меньше
+    if (hashtag.length < MIN_LENGTH_HASHTAG) {
+      message = `Длина хештега (${hashtag}) меньше допустимой (${MIN_LENGTH_HASHTAG}).`;
+      return false;
+    }
+    //если длина больше
+    if (hashtag.length > MAX_LENGTH_HASHTAG) {
+      message = `Длина хештега (${hashtag}) превышает допустимую (${MAX_LENGTH_HASHTAG}).`;
+      return false;
+    }
+    //если первый символ не решетка
+    if (hashtag !== FIRST_SIMBOL_HASHTAG && hashtag.length === 1) {
+      message = `Первый символ хештега (${hashtag}) должен быть (${FIRST_SIMBOL_HASHTAG}).`;
+      return false;
+    }
+    //если несколько решеток, re не справляется
+    if (hashtag.indexOf(FIRST_SIMBOL_HASHTAG, 1) !== -1) {
+      message = `В хештеге (${hashtag}) несколько символов (${FIRST_SIMBOL_HASHTAG}).`;
+      return false;
+    }
+    //все остальные случаи невалидности
+    message = `В хештеге (${hashtag}) неверные символы.`;
+    return false;
+  };
+
+   return true;
 }
 
-// поле которое проверяется, функция проверки, текст ошибки
+//функция с текстом ошибки
+function getHashtagErrorMessage() {
+  return message;
+}
+
+// 1-поле которое проверяется, 2 -функция проверки, 3 -текст ошибки
 pristine.addValidator(formUpload.querySelector('.text__description'),
-    validateComment, 'Максимум 140 символов');
+    validateComment, `Максимум ${MAX_COMMENT_LENGTH} символов`);
 
 pristine.addValidator(formUpload.querySelector('.text__hashtags'),
-    validateHastag, 'Максимум 3 символов');
+    validateHastag, getHashtagErrorMessage);
 
 const onFormSubmit = (evt) => {
-    const v = pristine.validate();
-    console.log(v)
+    pristine.validate();
 }
 
 const submitForm = () => {
