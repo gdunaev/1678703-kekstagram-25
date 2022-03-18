@@ -1,6 +1,6 @@
 import { getData } from './data.js';
 import { getArrayPhotos } from './photos.js';
-import { uploadFile } from './upload.js';
+import { uploadFile } from './____upload.js';
 import { setListenersFilters } from './filter.js';
 import { renderPhotos } from './render.js';
 
