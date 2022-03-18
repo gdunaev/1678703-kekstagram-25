@@ -13,10 +13,6 @@ const fileUpload = document.querySelector('#upload-file');
 const effectNone = document.querySelector('#effect-none');
 
 
-
-
-
-
 //функция открытия окна редактирования
 function uploadFile() {
   fileUpload.addEventListener('change', onUploadFileChange);
@@ -38,11 +34,11 @@ const hideFormUpload = () => {
   effectNone.checked = true;
   fileUpload.value = '';
   removeListeners();
-}
+};
 
 
 //функция показа окна для редактирования с подключением обработчиков
-const onUploadFileChange = () => {
+function onUploadFileChange () {
   submitForm();
   showImgUpload();
   setValidateHashtagComment();
@@ -50,7 +46,7 @@ const onUploadFileChange = () => {
 
 
 //функция показа окна с загружаемым изображением
-const showImgUpload = () => {
+function showImgUpload () {
   scaleControlValue.value = '100%';
   imgUploadOverlay.classList.remove('hidden');
   bodySelector.classList.remove('.modal-open');
@@ -59,13 +55,13 @@ const showImgUpload = () => {
 }
 
 // //обработчики
-const onUploadCancelClick = () => {
+function onUploadCancelClick () {
   hideFormUpload();
 }
 
 //функция проверки нажата ли клавиша Esc, и вызова функции hideFormUpload
 //не срабатывает если курсор в полях Хештег или Комментарий
-const onPopupeEscPress = (evt) => {
+function onPopupeEscPress (evt) {
   if (isEscEvent(evt) && evt.target !== textHashtags && evt.target !== textComment) {
     evt.preventDefault();
     hideFormUpload();
@@ -73,14 +69,14 @@ const onPopupeEscPress = (evt) => {
 }
 
 
-const onFormSubmit = (evt) => {
+function onFormSubmit (evt) {
   pristine.validate();
   if(!pristine.validate()) {
     evt.preventDefault();
   }
 }
 
-const submitForm = () => {
+function submitForm () {
   formUpload.addEventListener('submit', onFormSubmit);
 }
 

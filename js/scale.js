@@ -5,19 +5,19 @@ const imgUploadPreview = document.querySelector('.img-upload__preview');
 
 const onSmallerScaleClick = () => {
   setScale('smaller');
-}
+};
 const onBiggerScaleClick = () => {
   setScale('bigger');
-}
+};
 
 //функция подключения обработчиков масштаба
 const setListenersScale = () => {
   scaleControlSmaller.addEventListener('click', onSmallerScaleClick);
   scaleControlBigger.addEventListener('click', onBiggerScaleClick);
-}
+};
 
 //функция изменения масштаба
-const setScale = (scale) => {
+function setScale (scale) {
   let scaleValue = scaleControlValue.value.replace('%', '');
   if (scale === 'smaller' && scaleValue > 25) {
     scaleValue = scaleValue - 25;
@@ -26,7 +26,7 @@ const setScale = (scale) => {
   } else if (scale === 'reset') {
     scaleValue = 100;
   }
-  scaleControlValue.value = scaleValue + '%';
+  scaleControlValue.value = `${scaleValue  }%`;
   scaleValue = (scaleValue === 100 || scaleValue === '100') ? '1' : `0.${scaleValue}`;
   imgUploadPreview.children[0].style.transform = `scale(${scaleValue})`;
 }
