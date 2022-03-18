@@ -9,94 +9,94 @@ const formUpload = document.querySelector('.img-upload__form');
 const textComment = formUpload.querySelector('.text__description');
 const textHashtags = formUpload.querySelector('.text__hashtags');
 const pristine = new Pristine(formUpload, {
-    classTo: 'form__text__pristine',
-    errorTextParent: 'form__text__pristine',
-    errorTextTag: 'div',
+  classTo: 'form__text__pristine',
+  errorTextParent: 'form__text__pristine',
+  errorTextTag: 'div',
 }, true);
 
 
 function validateComment(value) {
-    return value.length <= MAX_COMMENT_LENGTH;
+  return value.length <= MAX_COMMENT_LENGTH;
 }
 
 let message = '';
 function validateAllHastags(value) {
 
-    message = '';
-    const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+  message = '';
+  const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 
-    //убираем пробелы и формируем массив
-    let arr = value.split(/\s+/g);
-    arr = arr.filter((element) => {
-        return element !== '';
-    })
+  //убираем пробелы и формируем массив
+  let arr = value.split(/\s+/g);
+  arr = arr.filter((element) => {
+    return element !== '';
+  })
 
-    //проверка на кол-во хештегов
-    if (arr.length > MAX_COUNT_HASHTAGS) {
-        message = `Количество хештегов превышает допустимое: ${MAX_COUNT_HASHTAGS}`;
-        return false;
-    }
+  //проверка на кол-во хештегов
+  if (arr.length > MAX_COUNT_HASHTAGS) {
+    message = `Количество хештегов превышает допустимое: ${MAX_COUNT_HASHTAGS}`;
+    return false;
+  }
 
-    return validateHastag(arr, re);
+  return validateHastag(arr, re);
 }
 
 
 function validateHastag(arr, re) {
 
-    //обход всех хештегов
-    const repeatingHastags = [];
-    for (const hashtag of arr) {
-        //все валидные
-        if (re.test(hashtag)) {
-            //проверка повторяющихся хештегов без учета регистра
-            if (repeatingHastags.indexOf(hashtag.toLowerCase()) >= 0) {
-                message = `Хештег (${hashtag}) уже использовался.`;
-                return false;
-            }
-            repeatingHastags.push(hashtag.toLowerCase());
-            continue;
-        }
-        //все НЕ валидные -----------------------------
-        //если первый символ не решетка
-        if (hashtag !== FIRST_SIMBOL_HASHTAG && hashtag.length === 1) {
-            message = `Первый символ хештега (${hashtag}) должен быть (${FIRST_SIMBOL_HASHTAG}).`;
-            return false;
-        }
-        //если длина меньше
-        if (hashtag.length < MIN_LENGTH_HASHTAG) {
-            message = `Длина хештега (${hashtag}) меньше допустимой (${MIN_LENGTH_HASHTAG}).`;
-            return false;
-        }
-        //если длина больше
-        if (hashtag.length > MAX_LENGTH_HASHTAG) {
-            message = `Длина хештега (${hashtag}) превышает допустимую (${MAX_LENGTH_HASHTAG}).`;
-            return false;
-        }
-        //если несколько решеток, re не справляется
-        if (hashtag.indexOf(FIRST_SIMBOL_HASHTAG, 1) !== -1) {
-            message = `В хештеге (${hashtag}) несколько символов (${FIRST_SIMBOL_HASHTAG}).`;
-            return false;
-        }
-        //все остальные случаи невалидности
-        message = `В хештеге (${hashtag}) неверные символы.`;
+  //обход всех хештегов
+  const repeatingHastags = [];
+  for (const hashtag of arr) {
+    //все валидные
+    if (re.test(hashtag)) {
+      //проверка повторяющихся хештегов без учета регистра
+      if (repeatingHastags.indexOf(hashtag.toLowerCase()) >= 0) {
+        message = `Хештег (${hashtag}) уже использовался.`;
         return false;
+      }
+      repeatingHastags.push(hashtag.toLowerCase());
+      continue;
     }
-    return true;
+    //все НЕ валидные -----------------------------
+    //если первый символ не решетка
+    if (hashtag !== FIRST_SIMBOL_HASHTAG && hashtag.length === 1) {
+      message = `Первый символ хештега (${hashtag}) должен быть (${FIRST_SIMBOL_HASHTAG}).`;
+      return false;
+    }
+    //если длина меньше
+    if (hashtag.length < MIN_LENGTH_HASHTAG) {
+      message = `Длина хештега (${hashtag}) меньше допустимой (${MIN_LENGTH_HASHTAG}).`;
+      return false;
+    }
+    //если длина больше
+    if (hashtag.length > MAX_LENGTH_HASHTAG) {
+      message = `Длина хештега (${hashtag}) превышает допустимую (${MAX_LENGTH_HASHTAG}).`;
+      return false;
+    }
+    //если несколько решеток, re не справляется
+    if (hashtag.indexOf(FIRST_SIMBOL_HASHTAG, 1) !== -1) {
+      message = `В хештеге (${hashtag}) несколько символов (${FIRST_SIMBOL_HASHTAG}).`;
+      return false;
+    }
+    //все остальные случаи невалидности
+    message = `В хештеге (${hashtag}) неверные символы.`;
+    return false;
+  }
+  return true;
 }
 
 //функция с текстом ошибки
 function getHashtagErrorMessage() {
-    return message;
+  return message;
 }
 
 function getCommentErrorMessage() {
-    return `Максимум ${MAX_COMMENT_LENGTH} символов`;
+  return `Максимум ${MAX_COMMENT_LENGTH} символов`;
 }
 
 function setValidateHashtagComment() {
-    pristine.addValidator(textComment, validateComment, getCommentErrorMessage);
+  pristine.addValidator(textComment, validateComment, getCommentErrorMessage);
 
-    pristine.addValidator(textHashtags, validateAllHastags, getHashtagErrorMessage);
+  pristine.addValidator(textHashtags, validateAllHastags, getHashtagErrorMessage);
 }
 
 

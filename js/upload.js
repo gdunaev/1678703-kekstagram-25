@@ -1,5 +1,5 @@
 import { isEscEvent } from './util.js';
-import { scaleControlValue, } from './scale.js';
+import { scaleControlValue } from './scale.js';
 import { setValidateHashtagComment, pristine } from './hashtag.js';
 
 const textComment = document.querySelector('.text__description');
