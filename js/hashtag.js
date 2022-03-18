@@ -23,31 +23,29 @@ let message = '';
 function validateAllHastags(value) {
 
   message = '';
-  const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+  const regExp = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 
   //убираем пробелы и формируем массив
-  let arr = value.split(/\s+/g);
-  arr = arr.filter((element) => {
-    return element !== '';
-  })
+  let hashtags = value.split(/\s+/g);
+  hashtags = hashtags.filter((element) => element !== '');
 
   //проверка на кол-во хештегов
-  if (arr.length > MAX_COUNT_HASHTAGS) {
+  if (hashtags.length > MAX_COUNT_HASHTAGS) {
     message = `Количество хештегов превышает допустимое: ${MAX_COUNT_HASHTAGS}`;
     return false;
   }
 
-  return validateHastag(arr, re);
+  return validateHastag(hashtags, regExp);
 }
 
 
-function validateHastag(arr, re) {
+function validateHastag(hashtags, regExp) {
 
   //обход всех хештегов
   const repeatingHastags = [];
-  for (const hashtag of arr) {
+  for (const hashtag of hashtags) {
     //все валидные
-    if (re.test(hashtag)) {
+    if (regExp.test(hashtag)) {
       //проверка повторяющихся хештегов без учета регистра
       if (repeatingHastags.indexOf(hashtag.toLowerCase()) >= 0) {
         message = `Хештег (${hashtag}) уже использовался.`;
@@ -72,7 +70,7 @@ function validateHastag(arr, re) {
       message = `Длина хештега (${hashtag}) превышает допустимую (${MAX_LENGTH_HASHTAG}).`;
       return false;
     }
-    //если несколько решеток, re не справляется
+    //если несколько решеток, regExp не справляется
     if (hashtag.indexOf(FIRST_SIMBOL_HASHTAG, 1) !== -1) {
       message = `В хештеге (${hashtag}) несколько символов (${FIRST_SIMBOL_HASHTAG}).`;
       return false;
@@ -100,4 +98,4 @@ function setValidateHashtagComment() {
 }
 
 
-export { setValidateHashtagComment, pristine }
+export { setValidateHashtagComment, pristine };
