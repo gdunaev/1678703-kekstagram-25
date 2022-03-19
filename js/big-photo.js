@@ -1,7 +1,6 @@
 import { isEscEvent } from './util.js';
 
 const LOAD_COMMENTS_STEP = 5;
-const OPEN_COUNT = [0];
 
 const bigPicture = document.querySelector('.big-picture');
 const pictureCancel = document.querySelector('.big-picture__cancel');
@@ -12,51 +11,15 @@ const bigPictureImg = bigPicture.querySelector('.big-picture__img');
 const likesCount = bigPicture.querySelector('.likes-count');
 const commentsCountText = bigPicture.querySelector('.comments-count');
 const socialCaption = bigPicture.querySelector('.social__caption');
-const commentList = document.createDocumentFragment();
+const commentListFragment = document.createDocumentFragment();
 const socialCommentCount = document.querySelector('.social__comment-count');
 const socialCommentsLoader = document.querySelector('.social__comments-loader');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
+const RememberComments = {
+  COMMENTS: [],
+  COUNT_OPEN: 0,
+};
 
-
-//загрузка порции комментариев
-function loadNextComments() {
-
-  let currentCount = LOAD_COMMENTS_STEP;
-
-  //обходим всю коллекцию, сначала там открытые комменты, потом идут закрытые
-  //как только доходим до закрытых - начинаем их открывать и потом вычисляем
-  //сколько всего у нас получилось открытых комментов, далее перерисовываем строку состояния.
-  for (const element of socialComments.children) {
-    if (element.classList.contains('hidden') && currentCount > 0) {
-      currentCount--;
-      element.classList.remove('hidden');
-    }
-  }
-  OPEN_COUNT[0] = OPEN_COUNT[0] + (LOAD_COMMENTS_STEP - currentCount);
-
-  setStringCount(socialComments.children.length);
-}
-
-//создать строку для отображения счетчика
-function setStringCount(count, start) {
-
-  // для случаев когда комментов меньше или равно константе (по заданию 5), кнопку Загрузить прячем.
-  if (count <= LOAD_COMMENTS_STEP && start) {
-    socialCommentCount.innerHTML = `${count} из <span class="comments-count">${count}</span> комментариев`;
-    commentsLoader.classList.add('hidden');
-    return;
-  }
-
-  //это для случаев когда комментов больше чем в константе
-  //на старте - первое число всегда константа
-  OPEN_COUNT[0] = start ? LOAD_COMMENTS_STEP : OPEN_COUNT[0];
-  socialCommentCount.innerHTML = `${OPEN_COUNT[0]} из <span class="comments-count">${count}</span> комментариев`;
-
-  commentsLoader.classList.remove('hidden');
-  if (OPEN_COUNT[0] === count) {
-    commentsLoader.classList.add('hidden');
-  }
-}
 
 //нажатие на кнопку Загрузить еще
 function onLoaderClick() {
@@ -107,37 +70,61 @@ function fillBigPhoto(photo) {
   bigPictureImg.querySelector('img').src = photo.url;
   commentsCountText.textContent = photo.comments.length;
   socialCaption.textContent = photo.description;
+  RememberComments.COMMENTS = photo.comments.slice();
+  RememberComments.COUNT_OPEN = 0;
 
-  renderComments(photo.comments);
+  renderComments();
 }
 
-//при открытии показывает разрешенное кол-во комментариев,
-//обходим всю коллекцию, ПОСЛЕДНИЕ элементы закрываем для просмотра
-//выводим строку состояния комментов.
-function showCommentsStart() {
+//загрузка порции комментариев
+function loadNextComments() {
 
   let count = 0;
-  for (const elem of commentList.children) {
+
+  //скопируем массив комментов с тех комментариев которые еще не открыты
+  const copyComments = RememberComments.COMMENTS.slice(RememberComments.COUNT_OPEN);
+  for (const comment of copyComments) {
     count++;
-    if (count > LOAD_COMMENTS_STEP) {
-      elem.classList.add('hidden');
+    if (count <= LOAD_COMMENTS_STEP) {
+      addComment(comment);
+      RememberComments.COUNT_OPEN++;
+      continue;
     }
+    break;
   }
-  setStringCount(count, true);
+  socialComments.appendChild(commentListFragment);
+
+  setStringCount();
+}
+
+//создать строку для отображения счетчика
+function setStringCount() {
+
+  commentsLoader.classList.remove('hidden');
+  socialCommentCount.innerHTML = `${RememberComments.COUNT_OPEN} из <span class="comments-count">${RememberComments.COMMENTS.length}</span> комментариев`;
+  if(RememberComments.COMMENTS.length <= LOAD_COMMENTS_STEP || RememberComments.COUNT_OPEN === RememberComments.COMMENTS.length){
+    commentsLoader.classList.add('hidden');
+  }
 }
 
 //удаляем комменты из разметки и добавляем свои (все), видимость комментов в showComments
-function renderComments(comments) {
+function renderComments() {
 
   deleteComments();
 
-  comments.forEach((comment) => {
-    addComment(comment);
-  });
+  let count = 0;
+  for (const comment of RememberComments.COMMENTS) {
+    count++;
+    if (count <= LOAD_COMMENTS_STEP) {
+      addComment(comment);
+      RememberComments.COUNT_OPEN = count;
+      continue;
+    }
+    break;
+  }
+  socialComments.appendChild(commentListFragment);
 
-  showCommentsStart();
-
-  socialComments.appendChild(commentList);
+  setStringCount();
 }
 
 //добавляем коммент во фрагмент
@@ -149,7 +136,7 @@ function addComment(comment) {
   socialPicture.src = comment.avatar;
   socialPicture.alt = comment.name;
   socialText.textContent = comment.message;
-  commentList.appendChild(currentComment);
+  commentListFragment.appendChild(currentComment);
 }
 
 //удаляем комменты из разметки
