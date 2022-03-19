@@ -16,7 +16,7 @@ const socialCommentCount = document.querySelector('.social__comment-count');
 const socialCommentsLoader = document.querySelector('.social__comments-loader');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
 const RememberComments = {
-  COMMENTS: 0,
+  COMMENTS: [],
   COUNT_OPEN: 0,
 };
 
@@ -71,6 +71,7 @@ function fillBigPhoto(photo) {
   commentsCountText.textContent = photo.comments.length;
   socialCaption.textContent = photo.description;
   RememberComments.COMMENTS = photo.comments.slice();
+  RememberComments.COUNT_OPEN = 0;
 
   renderComments();
 }
