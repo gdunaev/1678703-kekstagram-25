@@ -87,6 +87,4 @@ const getData = () => {
 };
 
 
-// const getData = getArrayData();
-
 export { getData };
