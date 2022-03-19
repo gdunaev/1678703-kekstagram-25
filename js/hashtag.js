@@ -51,7 +51,6 @@ function validateAllHastags(value) {
   if(validate){
     textHashtags.classList.remove('error__description');
   }
-  console.log(validate)
   return validate;
 }
 
