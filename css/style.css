@@ -1416,3 +1416,15 @@ main {
 .hidden {
   display: none;
 }
+
+/* валидация хештегов и комментария */
+.pristine-error {
+  color: #b2eb17;
+  margin-bottom: 20px;
+}
+.error__description {
+  margin-bottom: 5px;
+}
+.error__description__comment {
+  margin-bottom: 0px;
+}

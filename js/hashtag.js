@@ -1,4 +1,4 @@
-const MAX_COMMENT_LENGTH = 140;
+const MAX_COMMENT_LENGTH = 3;
 const MAX_COUNT_HASHTAGS = 5;
 const MAX_LENGTH_HASHTAG = 20;
 const MIN_LENGTH_HASHTAG = 2;
@@ -8,19 +8,31 @@ const FIRST_SIMBOL_HASHTAG = '#';
 const formUpload = document.querySelector('.img-upload__form');
 const textComment = formUpload.querySelector('.text__description');
 const textHashtags = formUpload.querySelector('.text__hashtags');
+const imgUploadText = formUpload.querySelector('.img-upload__text');
+
+
 const pristine = new Pristine(formUpload, {
   classTo: 'form__text__pristine',
+  errorClass: 'has-danger',
   errorTextParent: 'form__text__pristine',
   errorTextTag: 'div',
 }, true);
 
 
 function validateComment(value) {
-  return value.length <= MAX_COMMENT_LENGTH;
+  const validate = value.length <= MAX_COMMENT_LENGTH;
+  imgUploadText.classList.add('error__description__comment');
+  if(validate){
+    imgUploadText.classList.remove('error__description__comment');
+  }
+  return validate;
 }
 
 let message = '';
 function validateAllHastags(value) {
+
+  let validate = '';
+  textHashtags.classList.add('error__description');
 
   message = '';
   const regExp = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
@@ -35,7 +47,12 @@ function validateAllHastags(value) {
     return false;
   }
 
-  return validateHastag(hashtags, regExp);
+  validate = validateHastag(hashtags, regExp);
+  if(validate){
+    textHashtags.classList.remove('error__description');
+  }
+  console.log(validate)
+  return validate;
 }
 
 
@@ -82,7 +99,7 @@ function validateHastag(hashtags, regExp) {
   return true;
 }
 
-//функция с текстом ошибки
+//функции с текстом ошибки
 function getHashtagErrorMessage() {
   return message;
 }
