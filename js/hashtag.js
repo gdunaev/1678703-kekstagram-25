@@ -18,44 +18,19 @@ const pristine = new Pristine(formUpload, {
   errorTextTag: 'div',
 }, true);
 
+let message = '';
 
-function validateComment(value) {
+
+const validateComment = (value) => {
   const validate = value.length <= MAX_COMMENT_LENGTH;
   imgUploadText.classList.add('error__description__comment');
   if(validate){
     imgUploadText.classList.remove('error__description__comment');
   }
   return validate;
-}
+};
 
-let message = '';
-function validateAllHastags(value) {
-
-  let validate = '';
-  textHashtags.classList.add('error__description');
-
-  message = '';
-  const regExp = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
-
-  //убираем пробелы и формируем массив
-  let hashtags = value.split(/\s+/g);
-  hashtags = hashtags.filter((element) => element !== '');
-
-  //проверка на кол-во хештегов
-  if (hashtags.length > MAX_COUNT_HASHTAGS) {
-    message = `Количество хештегов превышает допустимое: ${MAX_COUNT_HASHTAGS}`;
-    return false;
-  }
-
-  validate = validateHastag(hashtags, regExp);
-  if(validate){
-    textHashtags.classList.remove('error__description');
-  }
-  return validate;
-}
-
-
-function validateHastag(hashtags, regExp) {
+const validateHastag = (hashtags, regExp) => {
 
   //обход всех хештегов
   const repeatingHastags = [];
@@ -96,22 +71,45 @@ function validateHastag(hashtags, regExp) {
     return false;
   }
   return true;
-}
+};
+
+
+const validateAllHastags = (value) => {
+
+  let validate = '';
+  textHashtags.classList.add('error__description');
+
+  message = '';
+  const regExp = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+
+  //убираем пробелы и формируем массив
+  let hashtags = value.split(/\s+/g);
+  hashtags = hashtags.filter((element) => element !== '');
+
+  //проверка на кол-во хештегов
+  if (hashtags.length > MAX_COUNT_HASHTAGS) {
+    message = `Количество хештегов превышает допустимое: ${MAX_COUNT_HASHTAGS}`;
+    return false;
+  }
+
+  validate = validateHastag(hashtags, regExp);
+  if(validate){
+    textHashtags.classList.remove('error__description');
+  }
+  return validate;
+};
+
 
 //функции с текстом ошибки
-function getHashtagErrorMessage() {
-  return message;
-}
+const getHashtagErrorMessage = () => message;
 
-function getCommentErrorMessage() {
-  return `Максимум ${MAX_COMMENT_LENGTH} символов`;
-}
+const getCommentErrorMessage = () => `Максимум ${MAX_COMMENT_LENGTH} символов`;
 
-function setValidateHashtagComment() {
+const setValidateHashtagComment = () => {
   pristine.addValidator(textComment, validateComment, getCommentErrorMessage);
 
   pristine.addValidator(textHashtags, validateAllHastags, getHashtagErrorMessage);
-}
+};
 
 
 export { setValidateHashtagComment, pristine };
