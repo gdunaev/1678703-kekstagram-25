@@ -1,5 +1,4 @@
-import noUiSlider from 'nouislider';
-import 'nouislider/dist/nouislider.css';
+
 
 const EFFECT_PREWIEW = 'effects__preview--';
 const effectLevelValue = document.querySelector('.effect-level__value');

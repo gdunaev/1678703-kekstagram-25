@@ -1,6 +1,7 @@
 import { isEscEvent } from './util.js';
 import { setListenersScale, setScale, onSmallerScaleClick, onBiggerScaleClick } from './scale.js';
 import { setValidateHashtagComment, pristine } from './hashtag.js';
+import {createSlaider, changeEffectClick} from './effect.js'
 
 const textComment = document.querySelector('.text__description');
 const formUpload = document.querySelector('.img-upload__form');
@@ -9,8 +10,48 @@ const imgUploadOverlay = document.querySelector('.img-upload__overlay');
 const uploadCancel = document.querySelector('#upload-cancel');
 const bodySelector = document.querySelector('body');
 const fileUpload = document.querySelector('#upload-file');
-const effectNone = document.querySelector('#effect-none');
 
+const effectNone = document.querySelector('#effect-none');
+const effectChrome = document.querySelector('#effect-chrome');
+const effectSepia = document.querySelector('#effect-sepia');
+const effectMarvin = document.querySelector('#effect-marvin');
+const effectPhobos = document.querySelector('#effect-phobos');
+const effectHeat = document.querySelector('#effect-heat');
+
+const imgUploadPreview = document.querySelector('.img-upload__preview');
+const sliderElement = document.querySelector('.effect-level__slider');
+const effectsPreview = document.querySelectorAll('.effects__preview');
+
+
+
+const onEffecNoneClick = () => {
+  changeEffectClick('none', 100, 0, 1);
+}
+const onEffectChromeClick = () => {
+  changeEffectClick('chrome', 1, 1, 0.1);
+}
+const onEffectSepiaClick = () => {
+  changeEffectClick('sepia', 1, 1, 0.1);
+}
+const onEffectMarvinClick = () => {
+  changeEffectClick('marvin', 100, 100, 1);
+}
+const onEffectPhobosClick = () => {
+  changeEffectClick('phobos', 3, 3, 0.1);
+}
+const onEffectHeatClick = () => {
+  changeEffectClick('heat', 3, 3, 0.1);
+}
+
+//функция подключения обработчиков переключения эффектов
+const setListenersEffect = () => {
+  effectNone.addEventListener('click', onEffecNoneClick);
+  effectChrome.addEventListener('click', onEffectChromeClick);
+  effectSepia.addEventListener('click', onEffectSepiaClick);
+  effectMarvin.addEventListener('click', onEffectMarvinClick);
+  effectPhobos.addEventListener('click', onEffectPhobosClick);
+  effectHeat.addEventListener('click', onEffectHeatClick);
+}
 
 const onFormSubmit = (evt) => {
   pristine.validate();
@@ -44,6 +85,13 @@ const removeListeners = () => {
   document.removeEventListener('click', onUploadCancelClick);
   document.removeEventListener('click', onSmallerScaleClick);
   document.removeEventListener('click', onBiggerScaleClick);
+
+  document.removeEventListener('click', onEffecNoneClick);
+  document.removeEventListener('click', onEffectChromeClick);
+  document.removeEventListener('click', onEffectSepiaClick);
+  document.removeEventListener('click', onEffectMarvinClick);
+  document.removeEventListener('click', onEffectPhobosClick);
+  document.removeEventListener('click', onEffectHeatClick);
 };
 
 //убрать окно загрузки и убрать обработчики
@@ -57,6 +105,9 @@ function hideFormUpload () {
   textComment.value = '';
   effectNone.checked = true;
   fileUpload.value = '';
+  sliderElement.noUiSlider.destroy();
+  fileUpload.value = '';
+  imgUploadPreview.children[0].src = '';
 
   removeListeners();
 }
@@ -77,8 +128,10 @@ const onUploadFileChange = () => {
   submitForm();
   showImgUpload();
   setValidateHashtagComment();
-
   setListenersScale();
+
+  createSlaider();
+  setListenersEffect();
 };
 
 //функция открытия окна редактирования
