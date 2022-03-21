@@ -1,7 +1,7 @@
 import { isEscEvent } from './util.js';
 import { setListenersScale, setScale, onSmallerScaleClick, onBiggerScaleClick } from './scale.js';
 import { setValidateHashtagComment, pristine } from './hashtag.js';
-import {createSlaider, changeEffectClick} from './effect.js'
+import {createSlaider, changeEffectClick, changeFilter} from './effect.js'
 
 const textComment = document.querySelector('.text__description');
 const formUpload = document.querySelector('.img-upload__form');
@@ -18,9 +18,9 @@ const effectMarvin = document.querySelector('#effect-marvin');
 const effectPhobos = document.querySelector('#effect-phobos');
 const effectHeat = document.querySelector('#effect-heat');
 
-const imgUploadPreview = document.querySelector('.img-upload__preview');
+// const imgUploadPreview = document.querySelector('.img-upload__preview__img');
 const sliderElement = document.querySelector('.effect-level__slider');
-const effectsPreview = document.querySelectorAll('.effects__preview');
+// const effectsPreview = document.querySelectorAll('.effects__preview');
 
 
 
@@ -98,6 +98,7 @@ const removeListeners = () => {
 function hideFormUpload () {
 
   setScale('reset');
+  changeFilter('reset');
 
   imgUploadOverlay.classList.add('hidden');
   bodySelector.classList.add('.modal-open');
