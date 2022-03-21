@@ -9,4 +9,3 @@ renderPhotos(getData()); //это загрузка локальных фото
 
 uploadFile();
 
-// 1 test

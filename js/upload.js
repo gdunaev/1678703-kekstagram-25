@@ -1,5 +1,5 @@
 import { isEscEvent } from './util.js';
-import { scaleControlValue } from './scale.js';
+import { setListenersScale, setScale, onSmallerScaleClick, onBiggerScaleClick } from './scale.js';
 import { setValidateHashtagComment, pristine } from './hashtag.js';
 
 const textComment = document.querySelector('.text__description');
@@ -42,10 +42,15 @@ const removeListeners = () => {
   document.removeEventListener('keydown', onPopupeEscPress);
   document.removeEventListener('submit', onFormSubmit);
   document.removeEventListener('click', onUploadCancelClick);
+  document.removeEventListener('click', onSmallerScaleClick);
+  document.removeEventListener('click', onBiggerScaleClick);
 };
 
 //убрать окно загрузки и убрать обработчики
 function hideFormUpload () {
+  
+  setScale('reset');
+
   imgUploadOverlay.classList.add('hidden');
   bodySelector.classList.add('.modal-open');
   textHashtags.value = '';
@@ -58,7 +63,9 @@ function hideFormUpload () {
 
 //функция показа окна с загружаемым изображением
 const showImgUpload = () => {
-  scaleControlValue.value = '100%';
+ 
+  setScale('reset');
+
   imgUploadOverlay.classList.remove('hidden');
   bodySelector.classList.remove('.modal-open');
   uploadCancel.addEventListener('click', onUploadCancelClick);
@@ -70,6 +77,8 @@ const onUploadFileChange = () => {
   submitForm();
   showImgUpload();
   setValidateHashtagComment();
+
+  setListenersScale();
 };
 
 //функция открытия окна редактирования
