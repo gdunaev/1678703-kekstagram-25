@@ -96,7 +96,7 @@ const removeListeners = () => {
 
 //убрать окно загрузки и убрать обработчики
 function hideFormUpload () {
-  
+
   setScale('reset');
 
   imgUploadOverlay.classList.add('hidden');
@@ -104,17 +104,16 @@ function hideFormUpload () {
   textHashtags.value = '';
   textComment.value = '';
   effectNone.checked = true;
-  fileUpload.value = '';
   sliderElement.noUiSlider.destroy();
   fileUpload.value = '';
-  imgUploadPreview.children[0].src = '';
+  // imgUploadPreview.children[0].src = '';
 
   removeListeners();
 }
 
 //функция показа окна с загружаемым изображением
 const showImgUpload = () => {
- 
+
   setScale('reset');
 
   imgUploadOverlay.classList.remove('hidden');
