@@ -22,19 +22,19 @@ const changeLvlEffect = (lvlEffect) => {
     case 'sepia':
       previewImg.style.filter = `sepia(${lvlEffect})`;
       break;
-      case 'marvin':
-        previewImg.style.filter = `invert(${lvlEffect}%)`;
+    case 'marvin':
+      previewImg.style.filter = `invert(${lvlEffect}%)`;
       break;
-      case 'phobos':
-        previewImg.style.filter = `blur(${lvlEffect}px)`;
+    case 'phobos':
+      previewImg.style.filter = `blur(${lvlEffect}px)`;
       break;
-      case 'heat':
-        previewImg.style.filter = `brightness(${lvlEffect})`;
+    case 'heat':
+      previewImg.style.filter = `brightness(${lvlEffect})`;
       break;
     default:
       imgUploadEffectLevel.classList.add('hidden'); //здесь эффект - none
       previewImg.style.filter = '';
-  };
+  }
 };
 
 //смена фильтра у эффекта,
@@ -48,7 +48,7 @@ const changeFilter = (mode = '') => {
 
   //получает массив из DomTokenList, потом возвращаем имя класса (с названием эффекта) по подстроке
   const classesAll = Array.prototype.slice.call(previewImg.classList,0);
-  let nameEffect = classesAll.find(item => item.includes(EFFECT_PREWIEW));
+  const nameEffect = classesAll.find((item) => item.includes(EFFECT_PREWIEW));
 
   previewImg.classList.remove(nameEffect);
   if(CurrentEffect.EFFECT !== '') {
