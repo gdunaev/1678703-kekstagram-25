@@ -47,8 +47,7 @@ const changeFilter = (mode = '') => {
   }
 
   //получает массив из DomTokenList, потом возвращаем имя класса (с названием эффекта) по подстроке
-  // console.log(previewImg.classList.slice(0))
-  const classesAll = Array.prototype.slice.call(previewImg.classList,0);
+  const classesAll = Array.from(previewImg.classList,0);
   const nameEffect = classesAll.find((item) => item.includes(EFFECT_PREWIEW));
 
   previewImg.classList.remove(nameEffect);
