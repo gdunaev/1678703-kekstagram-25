@@ -17,6 +17,8 @@ const effectMarvin = document.querySelector('#effect-marvin');
 const effectPhobos = document.querySelector('#effect-phobos');
 const effectHeat = document.querySelector('#effect-heat');
 const sliderElement = document.querySelector('.effect-level__slider');
+const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+const scaleControlBigger = document.querySelector('.scale__control--bigger');
 
 
 const onEffecNoneClick = () => {
@@ -76,17 +78,17 @@ const onUploadCancelClick = () => {
 //удаление обработчиков
 const removeListeners = () => {
   document.removeEventListener('keydown', onPopupeEscPress);
-  document.removeEventListener('submit', onFormSubmit);
-  document.removeEventListener('click', onUploadCancelClick);
-  document.removeEventListener('click', onSmallerScaleClick);
-  document.removeEventListener('click', onBiggerScaleClick);
+  formUpload.removeEventListener('submit', onFormSubmit);
+  uploadCancel.removeEventListener('click', onUploadCancelClick);
+  scaleControlSmaller.removeEventListener('click', onSmallerScaleClick);
+  scaleControlBigger.removeEventListener('click', onBiggerScaleClick);
 
-  document.removeEventListener('click', onEffecNoneClick);
-  document.removeEventListener('click', onEffectChromeClick);
-  document.removeEventListener('click', onEffectSepiaClick);
-  document.removeEventListener('click', onEffectMarvinClick);
-  document.removeEventListener('click', onEffectPhobosClick);
-  document.removeEventListener('click', onEffectHeatClick);
+  effectNone.removeEventListener('click', onEffecNoneClick);
+  effectChrome.removeEventListener('click', onEffectChromeClick);
+  effectSepia.removeEventListener('click', onEffectSepiaClick);
+  effectMarvin.removeEventListener('click', onEffectMarvinClick);
+  effectPhobos.removeEventListener('click', onEffectPhobosClick);
+  effectHeat.removeEventListener('click', onEffectHeatClick);
 };
 
 //убрать окно загрузки и убрать обработчики
