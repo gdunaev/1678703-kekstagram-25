@@ -110,10 +110,6 @@ const changeEffect = (lvlEffect, effect) => {
   }
 }
 
-//срабатывает при смене эффекта пользователем
-const changeEffectClick = (effect, max, start, step) => {
-  changeFilter(max, effect);
-  changeSlaider(0, max, start, step);
-}
+
 
 export { createSlaider, changeEffectClick, changeFilter };

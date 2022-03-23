@@ -8,3 +8,4 @@ renderPhotos(getData()); //это загрузка локальных фото
 // setListenersFilters();
 
 uploadFile();
+
