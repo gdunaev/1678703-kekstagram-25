@@ -1,8 +1,8 @@
 const EFFECT_PREWIEW = 'effects__preview--';
 const effectLevelValue = document.querySelector('.effect-level__value');
 const sliderElement = document.querySelector('.effect-level__slider');
-const previewImg = document.querySelector('.img-upload__preview__img');
-// const imgUploadPreview = document.querySelector('.img-upload__preview');
+const imgUploadPreview = document.querySelector('.img-upload__preview');
+const previewImg = imgUploadPreview.querySelector('img');
 const imgUploadEffectLevel = document.querySelector('.img-upload__effect-level');
 const CurrentEffect = {
   MAX: 0,
@@ -43,14 +43,10 @@ const changeFilter = (mode = '') => {
 
   if(mode === 'reset') {
     CurrentEffect.EFFECT = '';
-    previewImg.classList.remove('img-upload__preview__img'); //удаляем класс добавленный для удобства поиска
+    previewImg.className = '';
   }
 
-  //получает массив из DomTokenList, потом возвращаем имя класса (с названием эффекта) по подстроке
-  const classesAll = Array.from(previewImg.classList,0);
-  const nameEffect = classesAll.find((item) => item.includes(EFFECT_PREWIEW));
-
-  previewImg.classList.remove(nameEffect);
+  previewImg.className = '';
   if(CurrentEffect.EFFECT !== '') {
     previewImg.classList.add(`.${EFFECT_PREWIEW}${CurrentEffect.EFFECT}`);
   }
