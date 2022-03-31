@@ -3,6 +3,14 @@ import { setListenersScale, setScale, onSmallerScaleClick, onBiggerScaleClick } 
 import { setValidateHashtagComment, pristine } from './hashtag.js';
 import {createSlaider, changeEffectClick, changeFilter} from './effect.js';
 
+
+const TEXT_ERROR = 'Ошибка загрузки изображений';
+const TEXT_ERROR_BUTTON = 'Закрыть';
+const TEXT_SUCCESS = 'Изображение успешно загружено';
+const TEXT_SUCCESS_BUTTON = 'Закрыть';
+const FILE_TYPES = ['gif', 'jpeg', 'png', 'jpg'];
+
+
 const textComment = document.querySelector('.text__description');
 const formUpload = document.querySelector('.img-upload__form');
 const textHashtags = document.querySelector('.text__hashtags');
@@ -19,6 +27,9 @@ const effectHeat = document.querySelector('#effect-heat');
 const sliderElement = document.querySelector('.effect-level__slider');
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
+
+const imgUploadPreview = document.querySelector('.img-upload__preview img');
+const effectsPreview = document.querySelectorAll('.effects__preview');
 
 
 const onEffecNoneClick = () => {
@@ -119,20 +130,41 @@ const showImgUpload = () => {
   document.addEventListener('keydown', onPopupeEscPress);
 };
 
-//функция показа окна для редактирования с подключением обработчиков
-const onUploadFileChange = () => {
+const allНandlers = () => {
+
   submitForm();
   showImgUpload();
   setValidateHashtagComment();
   setListenersScale();
-
   createSlaider();
   setListenersEffect();
+
 };
 
-//функция открытия окна редактирования
+//загрузка файла и подключение обработчиков
+const onUploadFile = () => {
+
+  const file = fileUpload.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((it) => {
+    return fileName.endsWith(it);
+  });
+
+  if (matches) {
+    imgUploadPreview.src = URL.createObjectURL(file);
+
+    for (let elem of effectsPreview) {
+      elem.style.backgroundImage = `url(${imgUploadPreview.src})`;
+    }
+  }
+
+  allНandlers();
+
+};
+
+//установка листнера на загрузку файла и подключение обработчиков
 const uploadFile = () => {
-  fileUpload.addEventListener('change', onUploadFileChange);
+  fileUpload.addEventListener('change', onUploadFile);
 };
 
 
