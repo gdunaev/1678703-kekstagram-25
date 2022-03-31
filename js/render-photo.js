@@ -25,7 +25,6 @@ const renderPhoto = (photo) => {
 
 //обход массива с фото, вызов функции по наполнению шаблона и заполнение фрагмента
 const renderPhotos = (photos) => {
-
   const currentPhotos = sortPhotos(photos);
 
   currentPhotos.forEach((photo) => {
