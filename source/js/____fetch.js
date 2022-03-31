@@ -11,7 +11,7 @@ const checkStatus = (response) => {
     return response.json();
   }
   throw new Error(`${response.status} ${response.statusText}`);
-}
+};
 
 //запрос на сервер
 const sendRequest = (metod, bodyRequest, onSuccess, onError) => {
@@ -24,6 +24,6 @@ const sendRequest = (metod, bodyRequest, onSuccess, onError) => {
     .catch((error) => {
       onError(error);
     });
-}
+};
 
 export { sendRequest };

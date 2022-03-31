@@ -6,18 +6,15 @@ const TEXT_ERROR_BUTTON = 'Закрыть';
 
 
 //получаем массив с фото с сервера
-const getPhotos = () => {
+const getPhotos = () => new Promise((resolve) => {
+  const onSuccess = (array) => {
+    resolve(array);
+  };
+  const onError = () => {
+    showBlockMessage(TEXT_ERROR, TEXT_ERROR_BUTTON, 'error');
+  };
 
-  return new Promise((resolve) => {
-    const onSuccess = (array) => {
-      resolve(array);
-    }
-    const onError = () => {
-      showBlockMessage(TEXT_ERROR, TEXT_ERROR_BUTTON, 'error');
-    }
-
-    sendRequest('GET', { method: 'GET' }, onSuccess, onError);
-  })
-}
+  sendRequest('GET', { method: 'GET' }, onSuccess, onError);
+});
 
 export { getPhotos };
