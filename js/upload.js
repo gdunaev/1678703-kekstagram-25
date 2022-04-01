@@ -1,8 +1,8 @@
-import { isEscEvent } from './util.js';
+import { isEscEvent, showBlockMessage } from './util.js';
 import { setListenersScale, setScale, onSmallerScaleClick, onBiggerScaleClick } from './scale.js';
 import { setValidateHashtagComment, pristine } from './hashtag.js';
 import {createSlaider, changeEffectClick, changeFilter} from './effect.js';
-
+import {sendRequest} from './fetch.js';
 
 const TEXT_ERROR = 'Ошибка загрузки изображений';
 const TEXT_ERROR_BUTTON = 'Закрыть';
@@ -30,6 +30,7 @@ const scaleControlBigger = document.querySelector('.scale__control--bigger');
 
 const imgUploadPreview = document.querySelector('.img-upload__preview img');
 const effectsPreview = document.querySelectorAll('.effects__preview');
+const submitButton = document.querySelector('#upload-submit');
 
 
 const onEffecNoneClick = () => {
@@ -61,11 +62,35 @@ const setListenersEffect = () => {
   effectHeat.addEventListener('click', onEffectHeatClick);
 };
 
+//обработка успешной отправки
+const onSuccess = () => {
+  showBlockMessage(TEXT_SUCCESS, TEXT_SUCCESS_BUTTON, 'success');
+  hideFormUpload();
+};
+
+//обработка отправки с ошибкой
+const onError = () => {
+  showBlockMessage(TEXT_ERROR, TEXT_ERROR_BUTTON, 'error');
+  hideFormUpload();
+};
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+};
+
 const onFormSubmit = (evt) => {
-  pristine.validate();
   if(!pristine.validate()) {
     evt.preventDefault();
+    return;
   }
+  evt.preventDefault();
+  blockSubmitButton();
+
+  sendRequest('POST', { method: 'POST', body: new FormData(formUpload) }, onSuccess, onError);
 };
 
 const submitForm = () => {
@@ -117,6 +142,7 @@ function hideFormUpload () {
   fileUpload.value = '';
 
   removeListeners();
+  unblockSubmitButton();
 }
 
 //функция показа окна с загружаемым изображением
@@ -146,14 +172,12 @@ const onUploadFile = () => {
 
   const file = fileUpload.files[0];
   const fileName = file.name.toLowerCase();
-  const matches = FILE_TYPES.some((it) => {
-    return fileName.endsWith(it);
-  });
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
   if (matches) {
     imgUploadPreview.src = URL.createObjectURL(file);
 
-    for (let elem of effectsPreview) {
+    for (const elem of effectsPreview) {
       elem.style.backgroundImage = `url(${imgUploadPreview.src})`;
     }
   }

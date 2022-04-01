@@ -10,19 +10,6 @@ const deleteBlock = (name) => {
   currentBlock.remove();
 };
 
-
-//удалить блок с сообщением и обработчики
-const deleteBlockMessage = (name) => {
-  if (name === NameBlock.SUCCESS) {
-    document.removeEventListener('keydown', successEscHandler);
-    document.removeEventListener('click', successClickHandler);
-  } else {
-    document.removeEventListener('keydown', errorEscHandler);
-    document.removeEventListener('click', errorClickHandler);
-  }
-  deleteBlock(`.${name}`);
-};
-
 //проверить нажата ли клавиша Escape или Esc
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
@@ -34,12 +21,9 @@ const onPopupeEscPress = (name) => (evt) => {
   }
 };
 
-
-//клик на кнопке закрытия, обработчики не удаляем, т.к. элемент будет удален
-const onButtonClick = (name) => () => {
-  deleteBlockMessage(name);
-};
-
+//обработчики нажатия Escape
+const successEscHandler = onPopupeEscPress(NameBlock.SUCCESS);
+const errorEscHandler = onPopupeEscPress(NameBlock.ERROR);
 
 //клик на любом месте окна кроме таблички
 const onDocumentClick = (name) => (evt) => {
@@ -47,6 +31,17 @@ const onDocumentClick = (name) => (evt) => {
   if (currentElement.classList.contains(name)) {
     deleteBlockMessage(name);
   }
+};
+
+const successClickHandler = onDocumentClick(NameBlock.SUCCESS);
+const errorClickHandler = onDocumentClick(NameBlock.ERROR);
+
+//клик на кнопке закрытия, обработчики не удаляем, т.к. элемент будет удален
+const successButtonHandler = () => {
+  deleteBlockMessage(NameBlock.SUCCESS);
+};
+const errorButtonHandler = () => {
+  deleteBlockMessage(NameBlock.ERROR);
 };
 
 
@@ -74,6 +69,17 @@ const showBlockMessage = (text, textButton, name) => {
   document.addEventListener('click', errorClickHandler);
 };
 
+//удалить блок с сообщением и обработчики (поднятие)
+function deleteBlockMessage(name) {
+  if (name === NameBlock.SUCCESS) {
+    document.removeEventListener('keydown', successEscHandler);
+    document.removeEventListener('click', successClickHandler);
+  } else {
+    document.removeEventListener('keydown', errorEscHandler);
+    document.removeEventListener('click', errorClickHandler);
+  }
+  deleteBlock(`.${name}`);
+}
 
 //получить рандомное число
 const getRandomInt = (min, max, checkedValues = null) => {
@@ -97,27 +103,5 @@ const getRandomInt = (min, max, checkedValues = null) => {
   return result;
 };
 
-//проверить длину строки
-// eslint-disable-next-line no-unused-vars
-const checkLengthString = (currentString, maxLength) => !(String(currentString).length > maxLength);
-
-function successEscHandler () {
-  onPopupeEscPress(NameBlock.SUCCESS);
-}
-function errorEscHandler () {
-  onPopupeEscPress(NameBlock.ERROR);
-}
-function successClickHandler () {
-  onDocumentClick(NameBlock.SUCCESS);
-}
-function errorClickHandler() {
-  onDocumentClick(NameBlock.ERROR);
-}
-function successButtonHandler(){
-  onButtonClick(NameBlock.SUCCESS);
-}
-function errorButtonHandler(){
-  onButtonClick(NameBlock.ERROR);
-}
 
 export { getRandomInt, isEscEvent, showBlockMessage};
