@@ -1,100 +1,83 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable indent */
+import { renderPhotos } from './render-photo.js';
+import { getRandomInt } from './util.js';
 
-// import { getArrayPhotos } from './photos.js';
-// import { getRandomInt } from './util.js';
-// import _ from 'lodash';
 
 const QUANTITY_RANDOM = 10;
 const RERENDER_DELAY = 500;
-
-const filterDefault = document.querySelector('#filter-default');
-const filterRandom = document.querySelector('#filter-random');
-const filterDiscussed = document.querySelector('#filter-discussed');
-const imgFiltersButton = document.querySelectorAll('.img-filters__button');
-
-
-// //обработчик клика фильтра
-// const changeFilter = (cb) => {
-//     console.log('11')
-//     return (evt) => {
-//         filterDefault.classList.remove('img-filters__button--active');
-//         filterRandom.classList.remove('img-filters__button--active');
-//         filterDiscussed.classList.remove('img-filters__button--active');
-
-//         if (evt.target === filterDefault) {
-//             filterDefault.classList.add('img-filters__button--active');
-//             cb();
-//             return;
-//         } else if (evt.target === filterRandom) {
-//             filterRandom.classList.add('img-filters__button--active');
-//             cb();
-//             return;
-//         } else if (evt.target === filterDiscussed) {
-//             filterDiscussed.classList.add('img-filters__button--active');
-//             cb();
-//             return;
-//         }
-//     }
-// }
-
-// //смена фильтра и перерисовка фото на странице
-// const onFilterClick = changeFilter(_.debounce(() => getArrayPhotos(), RERENDER_DELAY));
-
-// //установка обработчиков на фильтры
-// const setListenersFilters = () => {
-//     filterDefault.addEventListener('click', onFilterClick);
-//     filterRandom.addEventListener('click', onFilterClick);
-//     filterDiscussed.addEventListener('click', onFilterClick);
-// }
-
-
-// //рандомные первые n-фото
-// const sortArrayRandomFirst = (array) => {
-
-//     const currentArray = [];
-//     const arrayCheck = [];
-//     for (let i = 0; i < QUANTITY_RANDOM; i++) {
-//         let j = getRandomInt(0, array.length - 1, arrayCheck);
-//         currentArray.push(array[j]);
-//     }
-
-//     for (let elem of array) {
-//         if (currentArray.includes(elem)) {
-//             continue;
-//         }
-//         currentArray.push(elem);
-//     }
-//     return currentArray;
-// }
-
-// //сравнение кол-ва комментариев у фото
-// const compareComments = (elementA, elementB) => {
-//     const rankA = elementA.comments.length;
-//     const rankB = elementB.comments.length;
-//     return rankB - rankA;
-// }
-
-// //сортировка по убыванию комментариев
-// const sortArrayDiscussed = (array) => {
-//     return array.sort(compareComments);
-// }
-
-//сортировка массива при установке фильтров
-const sortPhotos = (photos) => {
-    for (const element of imgFiltersButton) {
-        if (element.className.includes('img-filters__button--active')) {
-            if (element === filterDefault) {
-                //по умолчанию
-                return photos;
-            } else if (element === filterRandom) {
-                return photos; //sortArrayRandomFirst(array);
-            } else if (element === filterDiscussed) {
-                return photos; //sortArrayDiscussed(array);
-            }
-        }
-    }
-    return photos;
+const FilterPhotos = {
+  DEFAULT: [],
+  RANDOM: [],
+  DISCUSSED: [],
 };
 
-export { sortPhotos }; //setListenersFilters
+const filterButtons = document.querySelectorAll('.img-filters__button');
+const filterForm = document.querySelector('.img-filters__form');
+
+//задержка отрисовки
+const debounce = (callback, timeOut) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeOut);
+  };
+};
+
+//включает фильтр, ищет отсортированный массив, и вызывает отрисовку с задержкой
+const changeFilter = (cb) => (evt) => {
+  filterButtons.forEach((element) => {
+    element.classList.remove('img-filters__button--active');
+  });
+  evt.target.classList.add('img-filters__button--active');
+  const photos = FilterPhotos[evt.target.id.replace('filter-', '').toUpperCase()];
+
+  cb(photos);
+};
+
+//смена фильтра и перерисовка фото на странице
+const onFilterFormClick = changeFilter(debounce((photos) => renderPhotos(photos), RERENDER_DELAY));
+
+//установка обработчиков на фильтры
+const setListenersFilters = () => {
+  filterForm.addEventListener('click', onFilterFormClick);
+};
+
+
+//рандомные первые n-фото
+const sortRandomFirst = (photos) => {
+
+  const currentPhotos = [];
+  const checkedValues = [];
+  for (let i = 0; i < QUANTITY_RANDOM; i++) {
+    const j = getRandomInt(0, photos.length - 1, checkedValues);
+    currentPhotos.push(photos[j]);
+  }
+  for (const elem of photos) {
+    if (currentPhotos.includes(elem)) {
+      continue;
+    }
+    currentPhotos.push(elem);
+  }
+  return currentPhotos;
+};
+
+//сравнение кол-ва комментариев у фото
+const compareComments = (elementA, elementB) => {
+  const rankA = elementA.comments.length;
+  const rankB = elementB.comments.length;
+  return rankB - rankA;
+};
+
+//сортировка по убыванию комментариев
+const sortDiscussed = (photos) => photos.slice().sort(compareComments);
+
+//запоминаем сортировку, она меняться не будет с момента загрузки,
+//т.к. нет действий пользователей.
+const filterPhotos = (photos) => {
+  FilterPhotos.DEFAULT = photos;
+  FilterPhotos.RANDOM = sortRandomFirst(photos);
+  FilterPhotos.DISCUSSED = sortDiscussed(photos);
+};
+
+export { setListenersFilters, filterPhotos};
+
+

@@ -1,5 +1,4 @@
 import { showBigPhoto } from './big-photo.js';
-import { sortPhotos } from './filter.js';
 
 const pictures = document.querySelector('.pictures');
 const template = document.querySelector('#picture').content.querySelector('.picture');
@@ -22,12 +21,20 @@ const renderPhoto = (photo) => {
   return photoPreview;
 };
 
+//удаление фото перед загрузкой новых
+const removePhotos = () => {
+  const picturesAll = document.querySelectorAll('.picture');
+  picturesAll.forEach((element) => {
+    element.remove();
+  });
+};
 
 //обход массива с фото, вызов функции по наполнению шаблона и заполнение фрагмента
 const renderPhotos = (photos) => {
-  const currentPhotos = sortPhotos(photos);
 
-  currentPhotos.forEach((photo) => {
+  removePhotos();
+
+  photos.forEach((photo) => {
     fragment.appendChild(renderPhoto(photo));
   });
   pictures.appendChild(fragment);
