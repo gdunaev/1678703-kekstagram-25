@@ -31,6 +31,7 @@ const scaleControlBigger = document.querySelector('.scale__control--bigger');
 const imgUploadPreview = document.querySelector('.img-upload__preview img');
 const effectsPreview = document.querySelectorAll('.effects__preview');
 const submitButton = document.querySelector('#upload-submit');
+const imgUploadText = formUpload.querySelector('.img-upload__text');
 
 
 const onEffecNoneClick = () => {
@@ -127,20 +128,25 @@ const removeListeners = () => {
   effectHeat.removeEventListener('click', onEffectHeatClick);
 };
 
-//убрать окно загрузки и убрать обработчики
-function hideFormUpload () {
-
-  setScale('reset');
-  changeFilter('reset');
-
+const resetValuesClasses = () => {
   imgUploadOverlay.classList.add('hidden');
   bodySelector.classList.add('.modal-open');
+  imgUploadText.classList.remove('error__description__comment');
+  textHashtags.classList.remove('error__description');
   textHashtags.value = '';
   textComment.value = '';
   effectNone.checked = true;
   sliderElement.noUiSlider.destroy();
   fileUpload.value = '';
+  pristine.destroy();
+};
 
+//убрать окно загрузки и убрать обработчики
+function hideFormUpload () {
+
+  setScale('reset');
+  changeFilter('reset');
+  resetValuesClasses();
   removeListeners();
   unblockSubmitButton();
 }
