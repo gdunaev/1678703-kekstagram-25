@@ -1,4 +1,4 @@
-const MAX_COMMENT_LENGTH = 3;
+const MAX_COMMENT_LENGTH = 140;
 const MAX_COUNT_HASHTAGS = 5;
 const MAX_LENGTH_HASHTAG = 20;
 const MIN_LENGTH_HASHTAG = 2;
@@ -10,13 +10,6 @@ const textComment = formUpload.querySelector('.text__description');
 const textHashtags = formUpload.querySelector('.text__hashtags');
 const imgUploadText = formUpload.querySelector('.img-upload__text');
 
-
-const pristine = new Pristine(formUpload, {
-  classTo: 'form__text__pristine',
-  errorClass: 'has-danger',
-  errorTextParent: 'form__text__pristine',
-  errorTextTag: 'div',
-}, true);
 
 let message = '';
 
@@ -105,7 +98,17 @@ const getHashtagErrorMessage = () => message;
 
 const getCommentErrorMessage = () => `Максимум ${MAX_COMMENT_LENGTH} символов`;
 
+let pristine = undefined;
+
 const setValidateHashtagComment = () => {
+
+  pristine = new Pristine(formUpload, {
+    classTo: 'form__text__pristine',
+    errorClass: 'has-danger',
+    errorTextParent: 'form__text__pristine',
+    errorTextTag: 'div',
+  }, true);
+
   pristine.addValidator(textComment, validateComment, getCommentErrorMessage);
 
   pristine.addValidator(textHashtags, validateAllHastags, getHashtagErrorMessage);
@@ -113,3 +116,4 @@ const setValidateHashtagComment = () => {
 
 
 export { setValidateHashtagComment, pristine };
+

@@ -1,6 +1,6 @@
 const URL = {
-  GET: 'https://23.javascript.pages.academy/kekstagram/data',
-  POST: 'https://23.javascript.pages.academy/kekstagram',
+  GET: 'https://25.javascript.pages.academy/kekstagram/data',
+  POST: 'https://25.javascript.pages.academy/kekstagram',
 };
 
 
@@ -11,7 +11,7 @@ const checkStatus = (response) => {
     return response.json();
   }
   throw new Error(`${response.status} ${response.statusText}`);
-}
+};
 
 //запрос на сервер
 const sendRequest = (metod, bodyRequest, onSuccess, onError) => {
@@ -24,6 +24,6 @@ const sendRequest = (metod, bodyRequest, onSuccess, onError) => {
     .catch((error) => {
       onError(error);
     });
-}
+};
 
 export { sendRequest };

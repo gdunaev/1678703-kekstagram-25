@@ -1,7 +1,15 @@
-import { isEscEvent } from './util.js';
+import { isEscEvent, showBlockMessage } from './util.js';
 import { setListenersScale, setScale, onSmallerScaleClick, onBiggerScaleClick } from './scale.js';
 import { setValidateHashtagComment, pristine } from './hashtag.js';
 import {createSlaider, changeEffectClick, changeFilter} from './effect.js';
+import {sendRequest} from './fetch.js';
+
+const TEXT_ERROR = 'Ошибка загрузки изображений';
+const TEXT_ERROR_BUTTON = 'Закрыть';
+const TEXT_SUCCESS = 'Изображение успешно загружено';
+const TEXT_SUCCESS_BUTTON = 'Закрыть';
+const FILE_TYPES = ['gif', 'jpeg', 'png', 'jpg'];
+
 
 const textComment = document.querySelector('.text__description');
 const formUpload = document.querySelector('.img-upload__form');
@@ -19,6 +27,11 @@ const effectHeat = document.querySelector('#effect-heat');
 const sliderElement = document.querySelector('.effect-level__slider');
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
+
+const imgUploadPreview = document.querySelector('.img-upload__preview img');
+const effectsPreview = document.querySelectorAll('.effects__preview');
+const submitButton = document.querySelector('#upload-submit');
+const imgUploadText = formUpload.querySelector('.img-upload__text');
 
 
 const onEffecNoneClick = () => {
@@ -50,11 +63,35 @@ const setListenersEffect = () => {
   effectHeat.addEventListener('click', onEffectHeatClick);
 };
 
+//обработка успешной отправки
+const onSuccess = () => {
+  showBlockMessage(TEXT_SUCCESS, TEXT_SUCCESS_BUTTON, 'success');
+  hideFormUpload();
+};
+
+//обработка отправки с ошибкой
+const onError = () => {
+  showBlockMessage(TEXT_ERROR, TEXT_ERROR_BUTTON, 'error');
+  hideFormUpload();
+};
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+};
+
 const onFormSubmit = (evt) => {
-  pristine.validate();
   if(!pristine.validate()) {
     evt.preventDefault();
+    return;
   }
+  evt.preventDefault();
+  blockSubmitButton();
+
+  sendRequest('POST', { method: 'POST', body: new FormData(formUpload) }, onSuccess, onError);
 };
 
 const submitForm = () => {
@@ -91,21 +128,27 @@ const removeListeners = () => {
   effectHeat.removeEventListener('click', onEffectHeatClick);
 };
 
-//убрать окно загрузки и убрать обработчики
-function hideFormUpload () {
-
-  setScale('reset');
-  changeFilter('reset');
-
+const resetValuesClasses = () => {
   imgUploadOverlay.classList.add('hidden');
   bodySelector.classList.add('.modal-open');
+  imgUploadText.classList.remove('error__description__comment');
+  textHashtags.classList.remove('error__description');
   textHashtags.value = '';
   textComment.value = '';
   effectNone.checked = true;
   sliderElement.noUiSlider.destroy();
   fileUpload.value = '';
+  pristine.destroy();
+};
 
+//убрать окно загрузки и убрать обработчики
+function hideFormUpload () {
+
+  setScale('reset');
+  changeFilter('reset');
+  resetValuesClasses();
   removeListeners();
+  unblockSubmitButton();
 }
 
 //функция показа окна с загружаемым изображением
@@ -119,20 +162,39 @@ const showImgUpload = () => {
   document.addEventListener('keydown', onPopupeEscPress);
 };
 
-//функция показа окна для редактирования с подключением обработчиков
-const onUploadFileChange = () => {
+const allНandlers = () => {
+
   submitForm();
   showImgUpload();
   setValidateHashtagComment();
   setListenersScale();
-
   createSlaider();
   setListenersEffect();
+
 };
 
-//функция открытия окна редактирования
+//загрузка файла и подключение обработчиков
+const onUploadFile = () => {
+
+  const file = fileUpload.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    imgUploadPreview.src = URL.createObjectURL(file);
+
+    for (const elem of effectsPreview) {
+      elem.style.backgroundImage = `url(${imgUploadPreview.src})`;
+    }
+  }
+
+  allНandlers();
+
+};
+
+//установка листнера на загрузку файла и подключение обработчиков
 const uploadFile = () => {
-  fileUpload.addEventListener('change', onUploadFileChange);
+  fileUpload.addEventListener('change', onUploadFile);
 };
 
 

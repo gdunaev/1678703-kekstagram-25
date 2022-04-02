@@ -30,7 +30,5 @@
         "npm": "8.x"
     },
     "dependencies": {
-        "lodash": "^4.17.21",
-        "nouislider": "^15.5.1"
     }
 }

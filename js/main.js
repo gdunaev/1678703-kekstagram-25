@@ -1,11 +1,16 @@
-import { getData } from './data.js';
-import { renderPhotos } from './render-photo.js';
 import { uploadFile } from './upload.js';
-// import { setListenersFilters } from './filter.js';
+import {fillSite} from './fill-site.js';
+import { setListenersFilters } from './filter.js';
 
-renderPhotos(getData()); //это загрузка локальных фото
+//это загрузка локальных фото ПОКА ОСТАВИЛ, УБЕРУ В КОНЦЕ
+// import { getData } from './data.js';
+// import { renderPhotos } from './render-photo.js';
+// renderPhotos(getData());
 
-// setListenersFilters();
+
+fillSite();
 
 uploadFile();
+
+setListenersFilters();
 
