@@ -1,3 +1,5 @@
+import Pristine from '../pristine/pristine.min.js';
+
 const MAX_COMMENT_LENGTH = 140;
 const MAX_COUNT_HASHTAGS = 5;
 const MAX_LENGTH_HASHTAG = 20;
