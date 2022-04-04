@@ -1,5 +1,3 @@
-import Pristine from '../pristine/pristine.min.js';
-
 const MAX_COMMENT_LENGTH = 140;
 const MAX_COUNT_HASHTAGS = 5;
 const MAX_LENGTH_HASHTAG = 20;
@@ -14,8 +12,9 @@ const imgUploadText = formUpload.querySelector('.img-upload__text');
 
 
 let message = '';
+let pristine = undefined;
 
-
+//валидация коммента
 const validateComment = (value) => {
   const validate = value.length <= MAX_COMMENT_LENGTH;
   imgUploadText.classList.add('error__description__comment');
@@ -25,6 +24,7 @@ const validateComment = (value) => {
   return validate;
 };
 
+//детальная валидация хештега
 const validateHastag = (hashtags, regExp) => {
 
   //обход всех хештегов
@@ -68,7 +68,7 @@ const validateHastag = (hashtags, regExp) => {
   return true;
 };
 
-
+//валидация всех хештегов
 const validateAllHastags = (value) => {
 
   let validate = '';
@@ -94,14 +94,12 @@ const validateAllHastags = (value) => {
   return validate;
 };
 
-
-//функции с текстом ошибки
+//2-е функции с текстом ошибки
 const getHashtagErrorMessage = () => message;
 
 const getCommentErrorMessage = () => `Максимум ${MAX_COMMENT_LENGTH} символов`;
 
-let pristine = undefined;
-
+//установка валидаторов
 const setValidateHashtagComment = () => {
 
   pristine = new Pristine(formUpload, {
