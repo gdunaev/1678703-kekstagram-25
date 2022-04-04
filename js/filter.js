@@ -1,5 +1,4 @@
 import { renderPhotos } from './render-photo.js';
-import { getRandomInt } from './util.js';
 
 
 const QUANTITY_RANDOM = 10;
