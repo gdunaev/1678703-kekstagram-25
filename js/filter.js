@@ -1,5 +1,4 @@
 import { renderPhotos } from './render-photo.js';
-import { getRandomInt } from './util.js';
 
 
 const QUANTITY_RANDOM = 10;
@@ -22,13 +21,21 @@ const debounce = (callback, timeOut) => {
   };
 };
 
+//рандомные первые n-фото
+const sortRandomFirst = (photos) => photos.sort(() => Math.random() > 0.5 ? 1 : -1).slice(0, QUANTITY_RANDOM);
+
 //включает фильтр, ищет отсортированный массив, и вызывает отрисовку с задержкой
 const changeFilter = (cb) => (evt) => {
   filterButtons.forEach((element) => {
     element.classList.remove('img-filters__button--active');
   });
   evt.target.classList.add('img-filters__button--active');
-  const photos = FilterPhotos[evt.target.id.replace('filter-', '').toUpperCase()];
+  const nameFilter = evt.target.id.replace('filter-', '');
+  let photos = FilterPhotos[nameFilter.toUpperCase()];
+
+  if (nameFilter === 'random') {
+    photos = sortRandomFirst(FilterPhotos.DEFAULT.slice());
+  }
 
   cb(photos);
 };
@@ -41,24 +48,6 @@ const setListenersFilters = () => {
   filterForm.addEventListener('click', onFilterFormClick);
 };
 
-
-//рандомные первые n-фото
-const sortRandomFirst = (photos) => {
-
-  const currentPhotos = [];
-  const checkedValues = [];
-  for (let i = 0; i < QUANTITY_RANDOM; i++) {
-    const j = getRandomInt(0, photos.length - 1, checkedValues);
-    currentPhotos.push(photos[j]);
-  }
-  for (const elem of photos) {
-    if (currentPhotos.includes(elem)) {
-      continue;
-    }
-    currentPhotos.push(elem);
-  }
-  return currentPhotos;
-};
 
 //сравнение кол-ва комментариев у фото
 const compareComments = (elementA, elementB) => {
@@ -74,7 +63,6 @@ const sortDiscussed = (photos) => photos.slice().sort(compareComments);
 //т.к. нет действий пользователей.
 const filterPhotos = (photos) => {
   FilterPhotos.DEFAULT = photos;
-  FilterPhotos.RANDOM = sortRandomFirst(photos);
   FilterPhotos.DISCUSSED = sortDiscussed(photos);
 };
 
