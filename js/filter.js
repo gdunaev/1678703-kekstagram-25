@@ -23,17 +23,7 @@ const debounce = (callback, timeOut) => {
 };
 
 //рандомные первые n-фото
-const sortRandomFirst = (photos) => {
-
-  const currentPhotos = [];
-  const checkedValues = [];
-  for (let i = 0; i < QUANTITY_RANDOM; i++) {
-    const j = getRandomInt(0, photos.length - 1, checkedValues);
-    currentPhotos.push(photos[j]);
-  }
-
-  return currentPhotos;
-};
+const sortRandomFirst = (photos) => photos.sort(() => Math.random() > 0.5 ? 1 : -1).slice(0, QUANTITY_RANDOM);
 
 //включает фильтр, ищет отсортированный массив, и вызывает отрисовку с задержкой
 const changeFilter = (cb) => (evt) => {
@@ -45,7 +35,7 @@ const changeFilter = (cb) => (evt) => {
   let photos = FilterPhotos[nameFilter.toUpperCase()];
 
   if (nameFilter === 'random') {
-    photos = sortRandomFirst(FilterPhotos.DEFAULT);
+    photos = sortRandomFirst(FilterPhotos.DEFAULT.slice());
   }
 
   cb(photos);
