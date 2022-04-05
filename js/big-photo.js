@@ -82,7 +82,7 @@ const hideBigPhoto = () => {
 //нажатие на кнопку закрытия большого фото
 function onCancelClick () {
   hideBigPhoto();
-};
+}
 
 //нажатие клавиши Esc на открытом окне
 function onPopupeEscPress (evt) {
